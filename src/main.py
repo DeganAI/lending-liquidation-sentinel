@@ -41,6 +41,7 @@ app.add_middleware(
 
 # Configuration
 payment_address = os.getenv("PAYMENT_ADDRESS", "0x01D11F7e1a46AbFC6092d7be484895D2d505095c")
+base_url = os.getenv("BASE_URL", "https://lending-liquidation-sentinel-production.up.railway.app")
 free_mode = os.getenv("FREE_MODE", "false").lower() == "true"
 
 # Initialize Lending Monitor
@@ -383,8 +384,6 @@ async def root():
 @app.head("/.well-known/agent.json")
 async def agent_metadata():
     """AP2 (Agent Payments Protocol) metadata - returns HTTP 200"""
-    base_url = os.getenv("BASE_URL", "https://lending-liquidation-sentinel-production.up.railway.app")
-
     agent_json = {
         "name": "Lending Liquidation Sentinel",
         "description": "Monitor borrow positions and warn before liquidation risk. Track health factors and liquidation prices across Aave V3, Compound V3, Spark, and Radiant on 7+ chains.",
@@ -521,8 +520,6 @@ async def agent_metadata():
 @app.head("/.well-known/x402")
 async def x402_metadata():
     """x402 protocol metadata for service discovery"""
-    base_url = os.getenv("BASE_URL", "https://lending-liquidation-sentinel-production.up.railway.app")
-
     metadata = {
         "x402Version": 1,
         "accepts": [
@@ -544,6 +541,7 @@ async def x402_metadata():
 
 
 @app.get("/health")
+@app.head("/health")
 async def health():
     """Health check"""
     return {
@@ -638,6 +636,29 @@ async def monitor_position(request: MonitorRequest):
             status_code=500,
             detail=f"Internal server error: {str(e)}"
         )
+
+
+@app.get("/entrypoints/lending-liquidation-sentinel/invoke")
+@app.head("/entrypoints/lending-liquidation-sentinel/invoke")
+async def entrypoint_monitor_get():
+    """x402 discovery endpoint - returns HTTP 402"""
+    metadata = {
+        "x402Version": 1,
+        "accepts": [
+            {
+                "scheme": "exact",
+                "network": "base",
+                "maxAmountRequired": "50000",
+                "resource": f"{base_url}/entrypoints/lending-liquidation-sentinel/invoke",
+                "description": "Monitor lending position health and liquidation risk across Aave, Compound, Spark, and Radiant",
+                "mimeType": "application/json",
+                "payTo": payment_address,
+                "maxTimeoutSeconds": 30,
+                "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+            }
+        ]
+    }
+    return JSONResponse(content=metadata, status_code=402)
 
 
 @app.post("/entrypoints/lending-liquidation-sentinel/invoke")
