@@ -160,6 +160,25 @@ class X402Middleware(BaseHTTPMiddleware):
                     "payTo": self.payment_address,
                     "maxTimeoutSeconds": 30,
                     "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",  # USDC on Base
+                    "outputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "wallet": {
+                                "type": "string",
+                                "description": "Wallet address to monitor"
+                            },
+                            "protocol_ids": {
+                                "type": "array",
+                                "description": "Lending protocols to check"
+                            },
+                            "chain_id": {
+                                "type": "number",
+                                "description": "Chain ID"
+                            }
+                        },
+                        "required": ["wallet", "protocol_ids", "chain_id"],
+                        "description": "Position monitoring with liquidation risk warnings"
+                    }
                 }
             ]
         }
@@ -225,6 +244,25 @@ class X402Middleware(BaseHTTPMiddleware):
                         "payTo": self.payment_address,
                         "maxTimeoutSeconds": 30,
                         "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                        "outputSchema": {
+                            "type": "object",
+                            "properties": {
+                                "wallet": {
+                                    "type": "string",
+                                    "description": "Wallet address to monitor"
+                                },
+                                "protocol_ids": {
+                                    "type": "array",
+                                    "description": "Lending protocols to check"
+                                },
+                                "chain_id": {
+                                    "type": "number",
+                                    "description": "Chain ID"
+                                }
+                            },
+                            "required": ["wallet", "protocol_ids", "chain_id"],
+                            "description": "Position monitoring with liquidation risk warnings"
+                        }
                     }]
                 }
             )
