@@ -310,6 +310,7 @@ export default {
   fetch: app.fetch,
 };
 
+// Bun server start
 console.log(`🚀 Lending Liquidation Sentinel running on port ${process.env.PORT || 3000}`);
 console.log(`📝 Manifest: ${process.env.BASE_URL}/.well-known/agent.json`);
 console.log(`💰 Payment address: ${config.payments?.payTo}`);
