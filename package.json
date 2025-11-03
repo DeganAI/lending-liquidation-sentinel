@@ -1,20 +1,19 @@
 {
   "name": "lending-liquidation-sentinel",
   "version": "1.0.0",
-  "main": "index.ts",
+  "description": "Monitor borrow positions and warn before liquidation risk via x402",
   "type": "module",
   "scripts": {
-    "start": "tsx index.ts",
-    "dev": "tsx watch index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "start": "bun run src/index.ts"
   },
   "dependencies": {
-    "@lucid-dreams/agent-kit": "^0.2.22",
-    "hono": "^4.0.0",
-    "@hono/node-server": "^1.0.0",
-    "viem": "^2.0.0"
+    "@lucid-dreams/agent-kit": "^0.2.24",
+    "hono": "^4.x",
+    "zod": "^3.x",
+    "viem": "^2.x"
   },
   "devDependencies": {
-    "tsx": "^4.0.0",
-    "typescript": "^5.0.0"
+    "bun-types": "^1.x"
   }
 }
