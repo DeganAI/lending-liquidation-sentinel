@@ -4,8 +4,8 @@
   "description": "Monitor borrow positions and warn before liquidation risk via x402",
   "type": "module",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
-    "start": "bun run src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts"
   },
   "dependencies": {
     "@lucid-dreams/agent-kit": "^0.2.24",
@@ -14,6 +14,7 @@
     "viem": "^2.0.0"
   },
   "devDependencies": {
-    "bun-types": "^1.0.0"
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
   }
 }
