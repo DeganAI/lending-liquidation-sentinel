@@ -63,13 +63,21 @@ const CHAIN_CONFIGS: Record<number, any> = {
   56: { chain: bsc, rpc: "https://bsc-dataseed1.binance.org" },
 };
 
-// Create viem clients for each chain
+// Create viem clients lazily to avoid startup issues
 const clients: Record<number, ReturnType<typeof createPublicClient>> = {};
-for (const [chainId, config] of Object.entries(CHAIN_CONFIGS)) {
-  clients[parseInt(chainId)] = createPublicClient({
-    chain: config.chain,
-    transport: http(config.rpc),
-  });
+
+function getClient(chainId: number) {
+  if (!clients[chainId]) {
+    const config = CHAIN_CONFIGS[chainId];
+    if (!config) {
+      throw new Error(`Chain ${chainId} not supported`);
+    }
+    clients[chainId] = createPublicClient({
+      chain: config.chain,
+      transport: http(config.rpc),
+    });
+  }
+  return clients[chainId];
 }
 
 interface LendingPosition {
@@ -96,7 +104,7 @@ async function getAavePosition(address: string, chainId: number, threshold: numb
     const poolAddress = AAVE_POOL_V3[chainId];
     if (!poolAddress) return null;
 
-    const client = clients[chainId];
+    const client = getClient(chainId);
     const data = (await client.readContract({
       address: poolAddress as `0x${string}`,
       abi: [
@@ -167,7 +175,7 @@ async function getCompoundV3Position(address: string, chainId: number, threshold
     const cometAddress = COMPOUND_V3_COMET[chainId];
     if (!cometAddress) return null;
 
-    const client = clients[chainId];
+    const client = getClient(chainId);
     const collateralData = (await client.readContract({
       address: cometAddress as `0x${string}`,
       abi: [
