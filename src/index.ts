@@ -315,3 +315,4 @@ console.log(`🚀 Lending Liquidation Sentinel running on port ${process.env.POR
 console.log(`📝 Manifest: ${process.env.BASE_URL}/.well-known/agent.json`);
 console.log(`💰 Payment address: ${config.payments?.payTo}`);
 
+
