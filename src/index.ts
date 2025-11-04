@@ -41,7 +41,7 @@ const { app, addEntrypoint, config } = createAgentApp(
         payTo: "0x01D11F7e1a46AbFC6092d7be484895D2d505095c",
         network: "base",
         asset: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-        defaultPrice: "60000", // 0.06 USDC
+        defaultPrice: "$0.06", // 0.06 USDC
       },
     },
     useConfigPayments: true,
@@ -282,7 +282,7 @@ addEntrypoint({
   description: "Monitor lending positions and warn before liquidation risk across Aave V3 and Compound V3",
   input: LiquidationInputSchema,
   output: LiquidationOutputSchema,
-  price: "60000", // 0.06 USDC
+  price: "$0.06", // 0.06 USDC
   async handler({ input }) {
     const positions = await getLendingPositions(
       input.wallet_address,
